@@ -5,7 +5,7 @@ import cv2
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv2D
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers.legacy import Adam  # Importing Adam from legacy opmtimizer since recent versions don't support decay 
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
@@ -13,7 +13,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # command line argument
 ap = argparse.ArgumentParser()
-ap.add_argument("--mode",help="train/display")
+ap.add_argument("--mode",help="train/test")
 mode = ap.parse_args().mode
 
 # plots accuracy and loss curves
@@ -45,10 +45,11 @@ def plot_model_history(model_history):
 
 # Define data generators
 train_dir = 'data/train'
-val_dir = 'data/test'
+val_dir = 'data/test' # this is for validation
+testing_dir = 'data/testing-images'  # this is for testing
 
 num_train = 28709
-num_val = 7178
+num_val = 7136
 batch_size = 64
 num_epoch = 5 #changed from 50 to 5
 
@@ -103,38 +104,19 @@ if mode == "train":
 
 
 # emotions will be displayed on your face from the webcam feed
-elif mode == "display":
-    #model.load_weights('model.h5')
+elif mode == "test":
+    model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001, decay=1e-6),metrics=['accuracy'])
     model.load_weights('model.weights.h5')
-
-    # prevents openCL usage and unnecessary logging messages
-    cv2.ocl.setUseOpenCL(False)
-
-    # dictionary which assigns each label an emotion (alphabetical order)
-    emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
-
-    # start the webcam feed
-    cap = cv2.VideoCapture(0)
-    while True:
-        # Find haar cascade to draw bounding box around face
-        ret, frame = cap.read()
-        if not ret:
-            break
-        facecasc = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = facecasc.detectMultiScale(gray,scaleFactor=1.3, minNeighbors=5)
-
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
-            roi_gray = gray[y:y + h, x:x + w]
-            cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
-            prediction = model.predict(cropped_img)
-            maxindex = int(np.argmax(prediction))
-            cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-        cv2.imshow('Video', cv2.resize(frame,(1600,960),interpolation = cv2.INTER_CUBIC))
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
+    testing_generator = val_datagen.flow_from_directory(
+            testing_dir,
+            target_size=(48,48),
+            batch_size=batch_size,
+            color_mode="grayscale",
+            class_mode='categorical')
+    
+    num_test = 42
+    batch_size = 32
+    # Evaluate the model on the validation set
+    loss, accuracy = model.evaluate(testing_generator, steps=num_test // batch_size)
+    print(f"Test Loss: {loss}")
+    print(f"Test Accuracy: {accuracy}")
