@@ -1,7 +1,6 @@
 import numpy as np
 import argparse
 import matplotlib.pyplot as plt
-import cv2
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
 from tensorflow.keras.layers import Conv2D
@@ -9,12 +8,31 @@ from tensorflow.keras.optimizers.legacy import Adam  # Importing Adam from legac
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
+from tkinter import Tk
+from gui import ImageGallery
+
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # command line argument
 ap = argparse.ArgumentParser()
 ap.add_argument("--mode",help="train/test")
 mode = ap.parse_args().mode
+
+# Set the base path to the directory of this script
+base_path = os.path.dirname(os.path.abspath(__file__))
+
+# Define folder paths relative to the base path
+folder_paths = [os.path.join(base_path, "data/testing-images/angry"),
+                os.path.join(base_path, "data/testing-images/disgusted"),
+                os.path.join(base_path, "data/testing-images/fearful"),
+                os.path.join(base_path, "data/testing-images/happy"),
+                os.path.join(base_path, "data/testing-images/neutral"),
+                os.path.join(base_path, "data/testing-images/sad"),
+                os.path.join(base_path, "data/testing-images/surprised")]
+
+# Initialize the GUI application
+root = Tk()
+app = ImageGallery(root, folder_paths)
 
 # plots accuracy and loss curves
 def plot_model_history(model_history):
@@ -120,3 +138,5 @@ elif mode == "test":
     loss, accuracy = model.evaluate(testing_generator, steps=num_test // batch_size)
     print(f"Test Loss: {loss}")
     print(f"Test Accuracy: {accuracy}")
+    root.mainloop()
+    
