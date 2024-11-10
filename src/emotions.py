@@ -1,5 +1,4 @@
 import numpy as np
-import argparse
 import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
@@ -13,10 +12,7 @@ from gui import ImageGallery
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
-# command line argument
-ap = argparse.ArgumentParser()
-ap.add_argument("--mode",help="train/test")
-mode = ap.parse_args().mode
+mode = "test" # test || train
 
 # Set the base path to the directory of this script
 base_path = os.path.dirname(os.path.abspath(__file__))
