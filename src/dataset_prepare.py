@@ -3,6 +3,7 @@ import pandas as pd
 from PIL import Image
 from tqdm import tqdm
 import os
+import math
 
 # convert string to integer
 def atoi(s):
@@ -13,11 +14,25 @@ def atoi(s):
 
 # making folders
 outer_names = ['test','train']
-inner_names = ['angry', 'disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
+inner_names = ['angry','disgusted', 'fearful', 'happy', 'sad', 'surprised', 'neutral']
+new_inner_names=[]
+e_values=[]
+for i in range(19):
+    e_values.append(0)
+for items in inner_names:
+    if items!="neutral":
+        new_inner_names.append('slightly '+items)
+        new_inner_names.append('regular '+items)
+        new_inner_names.append('very '+items)
+    else:
+        new_inner_names.append(items)
+
+
+df_labels=pd.DataFrame([e_values],columns=new_inner_names)
 os.makedirs('data', exist_ok=True)
 for outer_name in outer_names:
     os.makedirs(os.path.join('data',outer_name), exist_ok=True)
-    for inner_name in inner_names:
+    for inner_name in new_inner_names:
         os.makedirs(os.path.join('data',outer_name,inner_name), exist_ok=True)
 
 # to keep count of each category
@@ -36,8 +51,9 @@ sad_test = 0
 surprised_test = 0
 neutral_test = 0
 
-df = pd.read_csv('./fer2013.csv')
+df = pd.read_csv('./fer2013_range.csv')
 mat = np.zeros((48,48),dtype=np.uint8)
+#print('Dataframe: ', df_labels.loc[0,'regular angry'])
 print("Saving images...")
 
 # read the csv file line by line
@@ -55,50 +71,42 @@ for i in tqdm(range(len(df))):
 
     # train
     if i < 28709:
-        if df['emotion'][i] == 0:
-            img.save('data/train/angry/im'+str(angry)+'.png')
-            angry += 1
-        elif df['emotion'][i] == 1:
-            img.save('data/train/disgusted/im'+str(disgusted)+'.png')
-            disgusted += 1
-        elif df['emotion'][i] == 2:
-            img.save('data/train/fearful/im'+str(fearful)+'.png')
-            fearful += 1
-        elif df['emotion'][i] == 3:
-            img.save('data/train/happy/im'+str(happy)+'.png')
-            happy += 1
-        elif df['emotion'][i] == 4:
-            img.save('data/train/sad/im'+str(sad)+'.png')
-            sad += 1
-        elif df['emotion'][i] == 5:
-            img.save('data/train/surprised/im'+str(surprised)+'.png')
-            surprised += 1
-        elif df['emotion'][i] == 6:
-            img.save('data/train/neutral/im'+str(neutral)+'.png')
-            neutral += 1
-
-    # test
+        directory='train'
     else:
-        if df['emotion'][i] == 0:
-            img.save('data/test/angry/im'+str(angry_test)+'.png')
-            angry_test += 1
-        elif df['emotion'][i] == 1:
-            img.save('data/test/disgusted/im'+str(disgusted_test)+'.png')
-            disgusted_test += 1
-        elif df['emotion'][i] == 2:
-            img.save('data/test/fearful/im'+str(fearful_test)+'.png')
-            fearful_test += 1
-        elif df['emotion'][i] == 3:
-            img.save('data/test/happy/im'+str(happy_test)+'.png')
-            happy_test += 1
-        elif df['emotion'][i] == 4:
-            img.save('data/test/sad/im'+str(sad_test)+'.png')
-            sad_test += 1
-        elif df['emotion'][i] == 5:
-            img.save('data/test/surprised/im'+str(surprised_test)+'.png')
-            surprised_test += 1
-        elif df['emotion'][i] == 6:
-            img.save('data/test/neutral/im'+str(neutral_test)+'.png')
-            neutral_test += 1
+        directory='test'
+        
+    intensity_dec, intensity_num= math.modf(df['emotion'][i])
+    
+    if intensity_dec>0.6:
+            intensity='very'
+    elif intensity_dec<0.3:
+            intensity='slightly'
+    else:
+        intensity='regular'
+    
+    #print(df_labels.loc[0,'regular angry'])
+    if int(intensity_num) == 0:   
+        img.save('data/'+directory+'/'+intensity+' angry/im'+str(df_labels.loc[0,intensity+' angry'])+'.png')
+        df_labels.loc[0,intensity+' angry']+=1
+
+    elif int(intensity_num) == 1:   
+        img.save('data/'+directory+'/'+intensity+' disgusted/im'+str(df_labels.loc[0,intensity+' disgusted'])+'.png')
+        df_labels.loc[0,intensity+' disgusted']+=1
+    elif int(intensity_num) == 2:   
+        img.save('data/'+directory+'/'+intensity+' fearful/im'+str(df_labels.loc[0,intensity+' fearful'])+'.png')
+        df_labels.loc[0,intensity+' fearful']+=1
+    elif int(intensity_num) == 3:   
+        img.save('data/'+directory+'/'+intensity+' happy/im'+str(df_labels.loc[0,intensity+' happy'])+'.png')
+        df_labels.loc[0,intensity+' happy']+=1
+    elif int(intensity_num) == 4:   
+        img.save('data/'+directory+'/'+intensity+' sad/im'+str(df_labels.loc[0,intensity+' sad'])+'.png')
+        df_labels.loc[0,intensity+' sad']+=1
+    elif int(intensity_num) == 5:   
+        img.save('data/'+directory+'/'+intensity+' surprised/im'+str(df_labels.loc[0,intensity+' surprised'])+'.png')
+        df_labels.loc[0,intensity+' surprised']+=1
+    elif int(intensity_num) == 6:
+        img.save('data/'+directory+'/neutral/im'+str(df_labels.loc[0,'neutral'])+'.png')
+        df_labels.loc[0,'neutral']+= 1
+
 
 print("Done!")
