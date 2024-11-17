@@ -8,6 +8,11 @@ from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -28,7 +33,6 @@ def plot_model_history(model_history):
     axs[0].set_title('Model Accuracy')
     axs[0].set_ylabel('Accuracy')
     axs[0].set_xlabel('Epoch')
-    #axs[0].set_xticks(np.arange(1,len(model_history.history['accuracy'])+1),len(model_history.history['accuracy'])/10)
     axs[0].set_xticks(np.arange(1, len(model_history.history['accuracy']) + 1)) #Chaged above line to this
     axs[0].legend(['train', 'val'], loc='best')
     # summarize history for loss
@@ -37,7 +41,6 @@ def plot_model_history(model_history):
     axs[1].set_title('Model Loss')
     axs[1].set_ylabel('Loss')
     axs[1].set_xlabel('Epoch')
-    #axs[1].set_xticks(np.arange(1,len(model_history.history['loss'])+1),len(model_history.history['loss'])/10)
     axs[1].set_xticks(np.arange(1, len(model_history.history['loss']) + 1))
     axs[1].legend(['train', 'val'], loc='best')
     fig.savefig('plot.png')
@@ -47,25 +50,28 @@ def plot_model_history(model_history):
 train_dir = 'data/train'
 val_dir = 'data/test'
 
-num_train = 28709
+num_train = 28709 + 436 #Adding 436 to account for newly added images to disgust folder. 
 num_val = 7178
 batch_size = 64
 num_epoch = 5 #changed from 50 to 5
 
+#Preparing images for training:
 train_datagen = ImageDataGenerator(rescale=1./255)
 val_datagen = ImageDataGenerator(rescale=1./255)
 
+#Load images and prep them to be used by deep learning model 
 train_generator = train_datagen.flow_from_directory(
-        train_dir,
-        target_size=(48,48),
-        batch_size=batch_size,
-        color_mode="grayscale",
-        class_mode='categorical')
+        train_dir,                  #Folder images are being loaded from
+        target_size=(48,48),        #Resizing images
+        batch_size=batch_size,      #Batch size
+        color_mode="grayscale",     #Load images in grayscale
+        class_mode='categorical')   #Classification type
 
 validation_generator = val_datagen.flow_from_directory(
         val_dir,
         target_size=(48,48),
         batch_size=batch_size,
+        shuffle=False,
         color_mode="grayscale",
         class_mode='categorical')
 
@@ -90,7 +96,7 @@ model.add(Dense(7, activation='softmax'))
 
 # If you want to train the same model or try other models, go for this
 if mode == "train":
-    model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001, decay=1e-6),metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=0.0001, decay=1e-6),metrics=['accuracy'])
     model_info = model.fit(
             train_generator,
             steps_per_epoch=num_train // batch_size,
@@ -98,13 +104,32 @@ if mode == "train":
             validation_data=validation_generator,
             validation_steps=num_val // batch_size)
     plot_model_history(model_info)
-    #model.save_weights('model.h5')
     model.save_weights('model.weights.h5')
+
+
+    train_accuracy = model_info.history['accuracy']
+    val_accuracy = model_info.history['val_accuracy']
+    print("The train accuracy is " + str(train_accuracy))
+    print("The test accuracy is " + str(val_accuracy))
+
+
+    #Creating confusion matrix:
+    y_pred = model.predict(validation_generator)#Predicted values
+    y_actual = validation_generator.classes     #Actual labels
+    class_labels = list(validation_generator.class_indices.keys())
+
+    cm = confusion_matrix(y_true = y_actual, y_pred = np.argmax(y_pred, axis=1)) #Np.argmax to get the class with highest probability
+    sns.heatmap(cm/np.sum(cm), annot=True, 
+            fmt='.2%', cmap='Blues', xticklabels=class_labels, yticklabels=class_labels)
+    plt.show()
+
+
+
 
 
 # emotions will be displayed on your face from the webcam feed
 elif mode == "display":
-    #model.load_weights('model.h5')
+    """
     model.load_weights('model.weights.h5')
 
     # prevents openCL usage and unnecessary logging messages
@@ -138,3 +163,12 @@ elif mode == "display":
 
     cap.release()
     cv2.destroyAllWindows()
+    """
+    print("Webcam would have deployed, commented out temporarily.")
+
+
+
+
+#Resources:
+# https://stackoverflow.com/questions/53351963/mnist-get-confusion-matrix 
+# https://medium.com/@dtuk81/confusion-matrix-visualization-fc31e3f30fea
