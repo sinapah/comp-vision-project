@@ -28,6 +28,7 @@ happy = 0
 sad = 0
 surprised = 0
 neutral = 0
+contempt = 0
 angry_test = 0
 disgusted_test = 0
 fearful_test = 0
@@ -35,7 +36,7 @@ happy_test = 0
 sad_test = 0
 surprised_test = 0
 neutral_test = 0
-
+contempt_test = 0
 df = pd.read_csv('./fer2013.csv')
 mat = np.zeros((48,48),dtype=np.uint8)
 print("Saving images...")
@@ -54,7 +55,7 @@ for i in tqdm(range(len(df))):
     img = Image.fromarray(mat)
 
     # train
-    if i < 28709:
+    if i < 45586:
         if df['emotion'][i] == 0:
             img.save('data/train/angry/im'+str(angry)+'.png')
             angry += 1
@@ -76,6 +77,9 @@ for i in tqdm(range(len(df))):
         elif df['emotion'][i] == 6:
             img.save('data/train/neutral/im'+str(neutral)+'.png')
             neutral += 1
+        elif df['emotion'][i] == 7:
+            img.save('data/train/contempt/im'+str(neutral)+'.png')
+            contempt += 1 
 
     # test
     else:
@@ -100,5 +104,9 @@ for i in tqdm(range(len(df))):
         elif df['emotion'][i] == 6:
             img.save('data/test/neutral/im'+str(neutral_test)+'.png')
             neutral_test += 1
+        elif df['emotion'][i] == 7:
+            img.save('data/test/contempt/im'+str(neutral_test)+'.png')
+            contempt_test += 1
+        
 
 print("Done!")

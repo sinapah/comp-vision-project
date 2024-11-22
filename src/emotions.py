@@ -8,8 +8,6 @@ from tensorflow.keras.optimizers.legacy import Adam  # Importing Adam from legac
 from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 
 # plots accuracy and loss curves
 def plot_model_history(model_history):
@@ -43,8 +41,8 @@ train_dir = 'data/train'
 val_dir = 'data/test' # this is for validation
 testing_dir = 'data/testing-images'  # this is for testing
 
-num_train = 28709
-num_val = 7136
+num_train = 45586
+num_val = 7717
 batch_size = 64
 num_epoch = 5 #changed from 50 to 5
 
@@ -84,7 +82,7 @@ model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(8, activation='softmax')) # 8 for 8 emotions (original 7 plus contempt)
 
-mode = "train"
+mode = "test"
 # If you want to train the same model or try other models, go for this
 if mode == "train":
     print("training")
@@ -97,7 +95,7 @@ if mode == "train":
             validation_steps=num_val // batch_size)
     plot_model_history(model_info)
     #model.save_weights('model.h5')
-    model.save_weights('model.weights.h5')
+    model.save_weights('model.weights.h5(1)')
 
 
 # emotions will be displayed on your face from the webcam feed
