@@ -44,7 +44,7 @@ testing_dir = 'data/testing-images'  # this is for testing
 num_train = 45586
 num_val = 7717
 batch_size = 64
-num_epoch = 5 #changed from 50 to 5
+num_epoch = 50 #changed from 50 to 5
 
 train_datagen = ImageDataGenerator(rescale=1./255)
 val_datagen = ImageDataGenerator(rescale=1./255)
@@ -95,13 +95,13 @@ if mode == "train":
             validation_steps=num_val // batch_size)
     plot_model_history(model_info)
     #model.save_weights('model.h5')
-    model.save_weights('model.weights.h5(1)')
+    model.save_weights('model.weights.h5')
 
 
 # emotions will be displayed on your face from the webcam feed
 elif mode == "test":
     model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001, decay=1e-6),metrics=['accuracy'])
-    model.load_weights('model.weights.h5')
+    model.load_weights('model.weights (2).h5')
     testing_generator = val_datagen.flow_from_directory(
             testing_dir,
             target_size=(48,48),
