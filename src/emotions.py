@@ -50,10 +50,10 @@ def plot_model_history(model_history):
     plt.show()
 
 def create_emotion_graph(title, values):
-  categories = ['Angry', 'Disgusted', 'Fearful', 'Happy', 'Neutral', 'Sad', 'Surprised']
+  categories = ['Angry', 'Disgusted', 'Fearful', 'Happy', 'Neutral', 'Sad', 'Surprised', 'Contempt']
   colours = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'pink']
   px = 1/plt.rcParams['figure.dpi']  # pixel in inches
-  fig, ax = plt.subplots(figsize=(9, 4), dpi=200) #width, height
+  fig, ax = plt.subplots(figsize=(10, 4), dpi=200) #width, height
   ax.bar(categories, values, color=colours)
   ax.set_xlabel('Emotions', fontsize=18)
   ax.set_ylabel('Probability of Emotion in Current Frame (for current frame)', fontsize=18)
@@ -76,28 +76,25 @@ def graph_padding(graph):
 train_dir = 'data/train'
 val_dir = 'data/test'
 
-num_train = 28709 + 436 #Adding 436 to account for newly added images to disgust folder. 
+num_train = 28709
 num_val = 7178
 batch_size = 64
-num_epoch = 40 #changed from 50 to 5
+num_epoch = 1
 
-#Preparing images for training:
 train_datagen = ImageDataGenerator(rescale=1./255)
 val_datagen = ImageDataGenerator(rescale=1./255)
 
-#Load images and prep them to be used by deep learning model 
 train_generator = train_datagen.flow_from_directory(
-        train_dir,                  #Folder images are being loaded from
-        target_size=(48,48),        #Resizing images
-        batch_size=batch_size,      #Batch size
-        color_mode="grayscale",     #Load images in grayscale
-        class_mode='categorical')   #Classification type
+        train_dir,
+        target_size=(48,48),
+        batch_size=batch_size,
+        color_mode="grayscale",
+        class_mode='categorical')
 
 validation_generator = val_datagen.flow_from_directory(
         val_dir,
         target_size=(48,48),
         batch_size=batch_size,
-        shuffle=False,
         color_mode="grayscale",
         class_mode='categorical')
 
@@ -118,7 +115,7 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(7, activation='softmax'))
+model.add(Dense(8, activation='softmax')) # 8 for 8 emotions (original 7 plus contempt)
 
 # If you want to train the same model or try other models, go for this
 if mode == "train":
@@ -175,80 +172,35 @@ elif mode == "test":
 
 # emotions will be displayed on your face from the webcam feed
 elif mode == "display":
-    """
     model.load_weights('model.weights.h5')
 
-    # prevents openCL usage and unnecessary logging messages
-    cv2.ocl.setUseOpenCL(False)
-
-    # dictionary which assigns each label an emotion (alphabetical order)
-    emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
-
-    # start the webcam feed
-    cap = cv2.VideoCapture(0)
-    while True:
-        # Find haar cascade to draw bounding box around face
-        ret, frame = cap.read()
-        if not ret:
-            break
-        facecasc = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        faces = facecasc.detectMultiScale(gray,scaleFactor=1.3, minNeighbors=5)
-
-        for (x, y, w, h) in faces:
-            cv2.rectangle(frame, (x, y-50), (x+w, y+h+10), (255, 0, 0), 2)
-            roi_gray = gray[y:y + h, x:x + w]
-            cropped_img = np.expand_dims(np.expand_dims(cv2.resize(roi_gray, (48, 48)), -1), 0)
-            prediction = model.predict(cropped_img)
-            maxindex = int(np.argmax(prediction))
-            cv2.putText(frame, emotion_dict[maxindex], (x+20, y-60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-
-        cv2.imshow('Video', cv2.resize(frame,(1600,960),interpolation = cv2.INTER_CUBIC))
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-    cap.release()
-    cv2.destroyAllWindows()
-    """
-    print("Webcam would have deployed, commented out temporarily.")
     i = 0 
-    emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised"}
+    emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised", 7: "Contempt"}
 
-    #Video application features from here:
-    cap = cv2.VideoCapture("videos/sad.mp4")
-    face_locations = []
+    #Get video
+    cap = cv2.VideoCapture("videos/angry.mp4") 
     process_this_frame = True
 
     while True:
-        # Grab a single frame of video
+        # Grab the next frame of the video
         ret, frame = cap.read()
 
-        #Get current height and width of the image
-        height = frame.shape[0]
-        width = frame.shape[1]
-        print(frame.shape)
         #Resize frame to 2/3 of the height and width to increase processing speed while still retaining quality
+        height = frame.shape[0] #Frame height
+        width = frame.shape[1] #Frame width
         frame = cv2.resize(frame, (int(width*2/3), int(height*2/3)))
 
         if process_this_frame:
-            """
-            # Find all the faces in the current frame of video
-            face_locations = face_recognition.face_locations(rgb_frame)
-            for top, right, bottom, left in face_locations:
-                # Draw a box around the face
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
-            """
-
-            # Load the Haar Cascade for face detection
+            # Using Haar Cascade for detcting faces
             face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-            # Frame to grayscale
+            # Convert the frame to grayscale
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             # Find all faces
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
             
-            #Counter to keep track of the number of faces in the frame
+            #Counter tracks= # of faces in the frame
             counter = 0 
-            #returned_graphs will take emotions graph for each face and append them.
+            #Appended emotion graphs 
             result_graphs = None
 
             # For each face detected, draw a rectangle and get the emotion breakdown for it.
@@ -268,23 +220,24 @@ elif mode == "display":
                     #print(prediction) #ex.[[7.2752759e-01, 2.3053539e-05, 5.0827023e-04, 9.4853419e-07, 9.6426476e-05,9.9926704e-01, 9.7008124e-05]]
 
                     #Used for writing out the breakdown of emotions in legible format
-                    emotion_breakdown = ""
-                    for j in range(len(prediction[0])):
-                        emotion_breakdown = emotion_breakdown + " " + emotion_dict[j] + ": " + str(prediction[0][j])
+                    #emotion_breakdown = ""
+                    #for j in range(len(prediction[0])):
+                    #    emotion_breakdown = emotion_breakdown + " " + emotion_dict[j] + ": " + str(prediction[0][j])
                     #Returns emotion and corresponding percentage:
-                    print(emotion_breakdown) 
+                    #print(emotion_breakdown) 
                     #ex.  Angry: 8.481411e-09 Disgusted: 0.00028628838 Fearful: 1.0516198e-05 Happy: 0.94973195 Neutral: 9.047412e-09 Sad: 0.04997055 Surprised: 6.466511e-07
 
                     #We plot the returned emotion prediction
                     fig = create_emotion_graph("Face " + str(counter+1), prediction[0])
                     fig.canvas.draw()
 
-                    #Convert the plot to an image (code taken from URL included below)
+                    #Convert the plot to an image (code taken from URL below)
+                    # https://medium.com/@Mert.A/real-time-plotting-with-opencv-and-matplotlib-2a452fbbbaf9
                     plot = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8,sep='')
                     plot = plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
                     plot = cv2.cvtColor(plot, cv2.COLOR_RGB2BGR) #Convert to RGB for matplotlib
 
-
+                    #Formatting emotions graphs for UI  
                     if counter < 1:
                         result_graphs = plot
                     elif counter >= 1:
@@ -292,22 +245,21 @@ elif mode == "display":
                         result_graphs = np.vstack([result_graphs, plot])
                     counter = counter + 1
                 
-            print(str(counter))
-            plot = graph_padding(result_graphs)
-            #plot = image_padding(result_graphs)
+            #Adding padding so graph is the size of the UI window   
+            plot = graph_padding(result_graphs) 
+            #Adding padding so image is the size of the UI window   
             frame = image_padding(frame)
+            #Append graph and image together
             result_img = np.hstack([frame, plot])
-            print(result_img.shape) #Height, width, 3000 x 3040
         
         process_this_frame = not process_this_frame #Process every other frame (due to resource constraints)
-        
 
         # Display the resulting image
         cv2.imshow("Image", result_img)
 
         #Printing out which frame we're on:
-        print("This is frame: ", i)
-        i = i + 1
+        #print("This is frame: ", i)
+        #i = i + 1
         
         # Wait for 'q'' key to stop
         if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -330,8 +282,10 @@ elif mode == "display":
 # https://matplotlib.org/stable/gallery/subplots_axes_and_figures/figure_size_units.html #Adjusting figure height in pixels
 # https://www.geeksforgeeks.org/python-opencv-cv2-copymakeborder-method/ #For adding padding
 # https://stackoverflow.com/questions/6390393/how-to-change-tick-label-font-size
+# https://medium.com/@Mert.A/real-time-plotting-with-opencv-and-matplotlib-2a452fbbbaf9
 
 #References for videos used:
 #Video by Mikhail Nilov: https://www.pexels.com/video/a-couple-looking-at-a-smartphone-screen-6963479/
 #Video by cottonbro studio: https://www.pexels.com/video/an-excited-young-female-at-game-arcade-5767473/ 
 # Video by fauxels: https://www.pexels.com/video/close-up-video-of-man-wearing-red-hoodie-3249935/ 
+# Video from Marriage Story Netflix: https://www.youtube.com/watch?v=FDFdroN7d0w&ab_channel=StillWatchingNetflix 
