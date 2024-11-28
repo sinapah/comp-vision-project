@@ -41,8 +41,8 @@ train_dir = 'data/train'
 val_dir = 'data/test' # this is for validation
 testing_dir = 'data/testing-images'  # this is for testing
 
-num_train = 45586
-num_val = 7717
+num_train = 43361
+num_val = 5121
 batch_size = 64
 num_epoch = 50 #changed from 50 to 5
 
@@ -101,7 +101,7 @@ if mode == "train":
 # emotions will be displayed on your face from the webcam feed
 elif mode == "test":
     model.compile(loss='categorical_crossentropy',optimizer=Adam(learning_rate=0.0001, decay=1e-6),metrics=['accuracy'])
-    model.load_weights('model.weights (2).h5')
+    model.load_weights('model.weights.h5')
     testing_generator = val_datagen.flow_from_directory(
             testing_dir,
             target_size=(48,48),
