@@ -184,11 +184,16 @@ elif mode == "display":
     while True:
         # Grab the next frame of the video
         ret, frame = cap.read()
+        if ret == False:
+            print("No more frames in this video!")
+            break;
 
-        #Resize frame to 2/3 of the height and width to increase processing speed while still retaining quality
         height = frame.shape[0] #Frame height
         width = frame.shape[1] #Frame width
+        #Resize frame to 2/3 of the height and width to increase processing speed while still retaining quality
         frame = cv2.resize(frame, (int(width*2/3), int(height*2/3)))
+        print(height, width)
+         
 
         if process_this_frame:
             # Using Haar Cascade for detcting faces
@@ -198,12 +203,13 @@ elif mode == "display":
             # Find all faces
             faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
             
-            #Counter tracks= # of faces in the frame
+            #Counter tracks # of faces in the frame
             counter = 0 
-            #Appended emotion graphs 
+            #Stores emotion graphs 
             result_graphs = None
 
             # For each face detected, draw a rectangle and get the emotion breakdown for it.
+            #A lot of the code below was modified from existing code. 
             for (x, y, w, h) in faces:
                 if counter < 3:
                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -244,22 +250,34 @@ elif mode == "display":
                         #Append both graphs one on top of the other. 
                         result_graphs = np.vstack([result_graphs, plot])
                     counter = counter + 1
-                
+
+            if counter == 0:
+                #If there aren't any faces in the current frame, have empty plot:
+                fig = create_emotion_graph("No Face Detected", [0,0,0,0,0,0,0,0])
+                fig.canvas.draw()
+
+                #Convert the plot to an image (code taken from URL below)
+                # https://medium.com/@Mert.A/real-time-plotting-with-opencv-and-matplotlib-2a452fbbbaf9
+                plot = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8,sep='')
+                plot = plot.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+                plot = cv2.cvtColor(plot, cv2.COLOR_RGB2BGR) #Convert to RGB for matplotlib
+                result_graphs = plot
             #Adding padding so graph is the size of the UI window   
             plot = graph_padding(result_graphs) 
+
+            #Change frame width and height if needed (for visibility in UI):
+            if height < 1500 and width < 1000:
+                frame = cv2.resize(frame, (int(width*1.5), int(height*1.5)))   
             #Adding padding so image is the size of the UI window   
             frame = image_padding(frame)
+
             #Append graph and image together
             result_img = np.hstack([frame, plot])
         
         process_this_frame = not process_this_frame #Process every other frame (due to resource constraints)
 
         # Display the resulting image
-        cv2.imshow("Image", result_img)
-
-        #Printing out which frame we're on:
-        #print("This is frame: ", i)
-        #i = i + 1
+        cv2.imshow("Video", result_img)
         
         # Wait for 'q'' key to stop
         if cv2.waitKey(1) & 0xFF == ord('q'):
