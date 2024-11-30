@@ -274,15 +274,16 @@ if __name__=='__main__':    #==================== START OF SCRIPT
         elif choice == '3': # Predict
             
             if os.path.isfile(model_file):
-                image_path=input("Please enter the file path and name of the image file_")
+                print("Please enter the file path for an image. \n (ex. sample-images/angry.png)")
+                image_path=input("File path of image: ")
                 print("Analyzing ", image_path)
                 predict_emotion(image_path)
                 print('*** DONE ***')
             else:
                 print("Model has not been trained, please select option 1")
         elif choice == '4': # Apply Model to Video 
-            print("You can click q when OpenCV window is in focus to quit.")
             print("Please enter the file path of a video \n (ex. videos/angry.mp4)")
+            print("You can click q when OpenCV window is in focus to quit.")
             image_path=input("Video path:")
 
             #Set up model:
