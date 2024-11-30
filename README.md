@@ -1,5 +1,5 @@
 <h2>Emotion Detection with Convolutional Neural Networks (CNN)</h2>
-This project focuses on extending an [existing code base]([URL](https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected and it's applicability. 
+This project focuses on extending an existing code base (https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected and it's applicability. 
 
 <h3>Project Structure</h3>
 
