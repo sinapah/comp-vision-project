@@ -12,7 +12,7 @@ This project focuses on extending an existing code base (https://github.com/atul
 * data - Directory where processed images are stored after running dataset_prepare.py.
 * requirements.txt - Specify the necessary requirements for running the code.
 * code_references.txt - Lists the resources used for the code.
-* transformations.ipynb - Code used for augmenting images in the dataset. Does not need to be run since augmented images are included. Provided for completeness. 
+* data_augmentations.ipynb - Code used for augmenting images in the dataset. Does not need to be run since augmented images are included. Provided for completeness. 
 
 
 <h3>Key Features</h3>
