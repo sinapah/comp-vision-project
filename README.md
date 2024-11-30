@@ -1,26 +1,28 @@
 <h2>Emotion Detection with Convolutional Neural Networks (CNN)</h2>
-
-This project focuses on detecting nuanced emotions from facial images using a Convolutional Neural Network (CNN). By leveraging the FER-2013 dataset and additional improvements, this model can recognize emotions with various intensity levels, such as mildly happy, happy, and very happy. The project also includes a graphical user interface (GUI) to make it accessible for real-time emotion detection.
+This project focuses on extending an [existing code base]([URL](https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected and it's applicability. 
 
 <h3>Project Structure</h3>
 
 * dataset_prepare.py - Prepares the FER-2013 dataset by reading fer2013.csv, converting each data row into an image, and organizing images by emotion labels for training and testing.
-* emotions.py - Contains the main CNN model for training and testing emotion detection. It includes data augmentation techniques to improve model accuracy.
+* emotions.py - Contains the main CNN model for training and testing emotion detection. It also includes code for testing the trained model on sample images and videos.
 * fer2013.csv - The dataset file containing pixel data and emotion labels for each image.
 * model.h5 and model.weights.h5 - Saved model files that allow loading a pre-trained model instead of training from scratch.
 * haarcascade_frontalface_default.xml - A pre-trained face detector from OpenCV, used to locate faces in images.
 * plot.png - A visualization of the model's accuracy and loss over training epochs.
 * data - Directory where processed images are stored after running dataset_prepare.py.
+* requirements.txt - Specify the necessary requirements for running the code.
+* code_references.txt - Lists the resources used for the code.
+* transformations.ipynb - Code used for augmenting images in the dataset. Does not need to be run since augmented images are included. Provided for completeness. 
 
 
 <h3>Key Features</h3>
 
-1. Emotion Detection with Intensity Levels:
-    * The model categorizes emotions not only by type (e.g., happy, sad, angry) but also by intensity (e.g., mildly happy, happy, very happy).
-2. Image Augmentation:
-    * To enhance the model's accuracy, various data augmentation techniques are applied, such as rotation, flipping, zooming, and shifting. This helps the model generalize better to new images and improves robustness.
-3. Graphical User Interface (GUI):
-    * A user-friendly GUI allows users to interact with the model, enabling real-time emotion detection from images or webcam feeds. The GUI displays the detected emotion along with its intensity level, providing immediate feedback.
+1. Improved dataset:
+    * We have increased the dataset by including images from both FER-2013 and AffectNet. In addition, through image augmentation we have decreased the class imbalance with emotions with fewer samples (i.e. disgust and contempt). This helps the model generalize better to new images, improve robustness and increase accuracy.
+2. Static Image Classification:
+    * The code gives the option of using the model to classify the emotions in a static image. 
+3. Emotion Detection in Videos:
+    * The model is able to interact with a provided video to detect the emotions in it. It then displays the breakdown of the detected emotions in a bar graph. Currently the code is able to classify up to 3 faces in the screen at a time. 
 
 
 <h3>Setup Instructions</h3>
