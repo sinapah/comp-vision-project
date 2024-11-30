@@ -1,0 +1,21 @@
+Below we have included links that we used for the code section of the project:
+
+References for the code
+# https://stackoverflow.com/questions/53351963/mnist-get-confusion-matrix 
+# https://medium.com/@dtuk81/confusion-matrix-visualization-fc31e3f30fea
+# https://stackoverflow.com/questions/58887056/resize-frame-of-cv2-videocapture
+# https://github.com/ageitgey/face_recognition/issues/1336
+# https://note.nkmk.me/en/python-opencv-pillow-image-size/ #Getting height, width of image
+# https://pyimagesearch.com/2021/01/20/opencv-resize-image-cv2-resize/ #Resizing an image
+# https://matplotlib.org/stable/gallery/subplots_axes_and_figures/figure_size_units.html #Adjusting figure height in pixels
+# https://www.geeksforgeeks.org/python-opencv-cv2-copymakeborder-method/ #For adding padding
+# https://stackoverflow.com/questions/6390393/how-to-change-tick-label-font-size
+# https://medium.com/@Mert.A/real-time-plotting-with-opencv-and-matplotlib-2a452fbbbaf9
+
+
+References for the videos used:
+# Video by Mikhail Nilov: https://www.pexels.com/video/a-couple-looking-at-a-smartphone-screen-6963479/
+# Video by cottonbro studio: https://www.pexels.com/video/an-excited-young-female-at-game-arcade-5767473/ 
+# Video by fauxels: https://www.pexels.com/video/close-up-video-of-man-wearing-red-hoodie-3249935/ 
+# Video from Marriage Story Netflix: https://www.youtube.com/watch?v=FDFdroN7d0w&ab_channel=StillWatchingNetflix 
+# Video by cottonbro studio: https://www.pexels.com/video/a-teenage-boy-undergoing-counselling-4100356/

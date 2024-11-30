@@ -282,7 +282,8 @@ if __name__=='__main__':    #==================== START OF SCRIPT
                 print("Model has not been trained, please select option 1")
         elif choice == '4': # Apply Model to Video 
             print("You can click q when OpenCV window is in focus to quit.")
-            image_path=input("Please enter the file path of a video: ")
+            print("Please enter the file path of a video \n (ex. videos/angry.mp4)")
+            image_path=input("Video path:")
 
             #Set up model:
             setup_NN()
@@ -292,11 +293,10 @@ if __name__=='__main__':    #==================== START OF SCRIPT
 
             i = 0 
             emotion_dict = {0: "Angry", 1: "Disgusted", 2: "Fearful", 3: "Happy", 4: "Neutral", 5: "Sad", 6: "Surprised", 7: "Contempt"}
+            process_this_frame = True
 
             #Get video
             cap = cv2.VideoCapture(image_path)
-            process_this_frame = True
-
             while True:
                 # Get the next frame of the video
                 ret, frame = cap.read()
@@ -324,7 +324,7 @@ if __name__=='__main__':    #==================== START OF SCRIPT
                     result_graphs = None
 
                     # For each face detected, draw a rectangle and get the emotion breakdown for it.
-                    #The code in the loop below is modified from the existing base code. 
+                    #The code in the loop below is modified from the existing base code at https://github.com/atulapra/Emotion-detection?tab=readme-ov-file. 
                     for (x, y, w, h) in faces:
                         if counter < 3:
                             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
@@ -391,7 +391,8 @@ if __name__=='__main__':    #==================== START OF SCRIPT
                 # Wait for 'q'' key to stop
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
-                #Close plot after each frame, to reduce memory used
+                
+                #Close plot after each frame (to reduce memory used)
                 plt.close() 
             cap.release()
             cv2.destroyAllWindows()
