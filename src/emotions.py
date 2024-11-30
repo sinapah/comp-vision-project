@@ -274,7 +274,7 @@ if __name__=='__main__':    #==================== START OF SCRIPT
         elif choice == '3': # Predict
             
             if os.path.isfile(model_file):
-                print("Please enter the file path for an image. \n (ex. sample-images/angry.png)")
+                print("Please enter the file path for an image. \n (ex. sample-images/sample_image_1.png)")
                 image_path=input("File path of image: ")
                 print("Analyzing ", image_path)
                 predict_emotion(image_path)
