@@ -1,5 +1,8 @@
 Below we have included links that we used for the code section of the project:
 
+Baseline code from:
+# https://github.com/atulapra/Emotion-detection?tab=readme-ov-file
+
 References for the code
 # https://stackoverflow.com/questions/53351963/mnist-get-confusion-matrix 
 # https://medium.com/@dtuk81/confusion-matrix-visualization-fc31e3f30fea
@@ -11,6 +14,11 @@ References for the code
 # https://www.geeksforgeeks.org/python-opencv-cv2-copymakeborder-method/ #For adding padding
 # https://stackoverflow.com/questions/6390393/how-to-change-tick-label-font-size
 # https://medium.com/@Mert.A/real-time-plotting-with-opencv-and-matplotlib-2a452fbbbaf9
+# https://www.geeksforgeeks.org/python-grayscaling-of-images-using-opencv/
+# https://www.geeksforgeeks.org/add-a-salt-and-pepper-noise-to-an-image-with-python/ 
+# https://www.geeksforgeeks.org/python-opencv-cv2-flip-method/
+# https://www.geeksforgeeks.org/image-enhancement-techniques-using-opencv-python/
+# https://www.geeksforgeeks.org/python-opencv-getrotationmatrix2d-function/
 
 
 References for the videos used:
