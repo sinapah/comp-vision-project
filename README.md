@@ -27,29 +27,7 @@ This project focuses on extending an existing code base (https://github.com/atul
 
 <h3>Setup Instructions</h3>
 
-1. Clone the Repository:
-            git clone https://github.com/sinapah/comp-vision-project.git cd <repository-folder> 
-2. Set Up Virtual Environment:
-            python3 -m venv emotion_env source emotion_env/bin/activate 
-3. Install Dependencies:
-             pip install numpy pandas pillow opencv-python tensorflow matplotlib tqdm 
-4. Download and Place fer2013.csv:
-    * Ensure fer2013.csv is in the main project directory.
-    * If necessary, modify the file path in dataset_prepare.py to reflect the location of your CSV file.
-
-
-<h3>Running the Project</h3>
-
-1. Prepare the Dataset:
-    * Run the data preparation script to convert fer2013.csv into images and organize them for training and testing: bash Copy code   python3 src/dataset_prepare.py
-2. Train the Model:
-    * To train the CNN model with augmented data, run emotions.py in training mode: bash Copy code   python3 src/emotions.py --mode train
-3. Test the Model::
-    * After training, evaluate the model using test images: bash Copy code   python3 src/emotions.py --mode test
-4. Launch the GUI:
-   * Once the model is trained, you can launch the GUI to detect emotions in real-time. The GUI allows loading images or using a webcam feed to display detected emotions with intensity levels.
-
-
+* Refer to the installation guide for this.
 
 <h3>Model Architecture</h3>
 
