@@ -32,7 +32,8 @@ This project focuses on extending an existing code base (https://github.com/atul
 <summary><h3>Setup Instructions</h3></summary>
    
 * Refer to the installation guide for this.
-* You can download the PDF here: [Example PDF](https://github.com/username/repository-name/raw/main/docs/example.pdf)
+* You can download the PDF here: [Installation Guide](Installation%20Guide.pdf)
+
 
 </details>
 
@@ -52,7 +53,6 @@ The CNN model in emotions.py is structured as follows:
 The model's training performance, including accuracy and loss, is visualized in plot.png. With the applied data augmentation techniques, the model achieves improved generalization and robustness in emotion detection.
 
 ![An image with two graphs showing model loss and accuracy.]([URL]([https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png](https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png?raw=true)))
-[<img src="[path/to/image.png](https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png)">]([https://link-to-your-URL/](https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png?raw=true)),
 
 </details>
 
