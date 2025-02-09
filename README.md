@@ -2,7 +2,7 @@
 This project focuses on extending an existing code base (https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected, image detection in static images and real-time image detection in videos.
 
 <details>
-<summary>Project Structure</summary>
+<summary><h3>Project Structure</h3></summary>
 
 - dataset_prepare.py - Prepares the FER-2013 dataset by reading fer2013.csv, converting each data row into an image, and organizing images by emotion labels for training and testing.
 - emotions.py - Contains the main CNN model for training and testing emotion detection. It also includes code for testing the trained model on sample images and videos.
