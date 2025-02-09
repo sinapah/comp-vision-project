@@ -2,18 +2,18 @@
 This project focuses on extending an existing code base (https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected, image detection in static images and real-time image detection in videos.
 
 <details>
-<summary>How do I dropdown?</summary>
+<summary><h3>Project Structure</h3></summary>
 <br>
-This is how you dropdown.
-<br><br>
-<pre>
-&lt;details&gt;
-&lt;summary&gt;How do I dropdown?&lt;&#47;summary&gt;
-&lt;br&gt;
-This is how you dropdown.
-&lt;&#47;details&gt;
-</pre>
-</details>
+* dataset_prepare.py - Prepares the FER-2013 dataset by reading fer2013.csv, converting each data row into an image, and organizing images by emotion labels for training and testing.
+* emotions.py - Contains the main CNN model for training and testing emotion detection. It also includes code for testing the trained model on sample images and videos.
+* fer2013.csv - The dataset file containing pixel data and emotion labels for each image.
+* model.h5 and model.weights.h5 - Saved model files that allow loading a pre-trained model instead of training from scratch.
+* haarcascade_frontalface_default.xml - A pre-trained face detector from OpenCV, used to locate faces in images.
+* plot.png - A visualization of the model's accuracy and loss over training epochs.
+* data - Directory where processed images are stored after running dataset_prepare.py.
+* requirements.txt - Specify the necessary requirements for running the code.
+* code_references.txt - Lists the resources used for the code.
+* data_augmentations.ipynb - Code used for augmenting images in the dataset. Does not need to be run since augmented images are included. Provided for completeness. </details>
 
 <h3>Project Structure</h3>
 
