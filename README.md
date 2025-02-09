@@ -51,7 +51,7 @@ The CNN model in emotions.py is structured as follows:
 <summary><h3>Results</h3></summary>
 The model's training performance, including accuracy and loss, is visualized in plot.png. With the applied data augmentation techniques, the model achieves improved generalization and robustness in emotion detection.
 
-![An image with two graphs showing model loss and accuracy.]([URL](https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png))
+![An image with two graphs showing model loss and accuracy.]([URL]([https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png](https://github.com/sinapah/comp-vision-project/blob/final-version/src/plot.png?raw=true)))
 
 </details>
 
