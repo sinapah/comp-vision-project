@@ -9,7 +9,7 @@ This project focuses on extending an existing code base (https://github.com/atul
   - [3. Emotion Detection in Videos](#3-emotion-detection-in-videos)
 - [Demo](#demo)
   - [Emotion Detection in Images](#emotion-detection-in-images)
-  - [Emotion Detection in Videos](#emotion-detection-in-videos-1)
+  - [Emotion Detection in Videos](#emotion-detection-in-videos)
     - [Example 1](#example-1)
     - [Example 2](#example-2)
     - [Example 3](#example-3)
