@@ -1,17 +1,37 @@
 # Emotion Detection with Convolutional Neural Networks (CNN)
 This project focuses on extending an existing code base (https://github.com/atulapra/Emotion-detection?tab=readme-ov-file) to improve the number of emotions detected, image detection in static images and real-time image detection in videos.
 
+# Table of Contents
+- [Emotion Detection with Convolutional Neural Networks (CNN)](#emotion-detection-with-convolutional-neural-networks-cnn)
+- [Key Features](#key-features)
+  - [1. Improved dataset](#1-improved-dataset)
+  - [2. Static Image Classification](#2-static-image-classification)
+  - [3. Emotion Detection in Videos](#3-emotion-detection-in-videos)
+- [Demo](#demo)
+  - [Emotion Detection in Images](#emotion-detection-in-images)
+  - [Emotion Detection in Videos](#emotion-detection-in-videos-1)
+    - [Example 1](#example-1)
+    - [Example 2](#example-2)
+    - [Example 3](#example-3)
+- [Project Structure](#project-structure)
+- [Setup Instructions](#setup-instructions)
+- [Model Architecture](#model-architecture)
+- [Results](#results)
+- [Dependencies](#dependencies)
+- [License](#license)
+
+
 ## Key Features
 
 ### 1. Improved dataset:
-    - We have increased the dataset by including images from both FER-2013 and AffectNet, increasing diversity and coverage. This expansion also allows for the detection of an additional emotion, enhancing the model’s classification capabilities.
-    - In addition, image augmentation techniques like Gaussian noise, slight rotations, brightness/contrast adjustments, and image flipping, are employed to help the model generalize better to new images, improve robustness, decrease class imbalance for emotions with fewer samples (i.e. disgust and contempt) and increase accuracy.
+- We have increased the dataset by including images from both FER-2013 and AffectNet, increasing diversity and coverage. This expansion also allows for the detection of an additional emotion, enhancing the model’s classification capabilities.
+- In addition, image augmentation techniques like Gaussian noise, slight rotations, brightness/contrast adjustments, and image flipping, are employed to help the model generalize better to new images, improve robustness, decrease class imbalance for emotions with fewer samples (i.e. disgust and contempt) and increase accuracy.
 ### 2. Static Image Classification:
-    - The code gives the option of using the model to classify the emotions in a static image. 
+- The code gives the option of using the model to classify the emotions in a static image. 
 ### 3. Emotion Detection in Videos:
-    - The model is able to interact with a provided video to detect the emotions in it. It then displays the breakdown of the detected emotions in a bar graph.
-    - We optimized video processing by adjusting video quality and frame rate to improve the speed and efficiency of emotion detection. These optimizations ensure real-time performance without sacrificing accuracy.
-    - The system can handle multiple faces within a single video frame, ensuring that emotions can be detected simultaneously (for up to 3 faces on the screen at a time). It also adapts to varying video frame dimensions, making it versatile for different types of video input.
+- The model is able to interact with a provided video to detect the emotions in it. It then displays the breakdown of the detected emotions in a bar graph.
+- We optimized video processing by adjusting video quality and frame rate to improve the speed and efficiency of emotion detection. These optimizations ensure real-time performance without sacrificing accuracy.
+- The system can handle multiple faces within a single video frame, ensuring that emotions can be detected simultaneously (for up to 3 faces on the screen at a time). It also adapts to varying video frame dimensions, making it versatile for different types of video input.
 ---
 
 ## Demo
